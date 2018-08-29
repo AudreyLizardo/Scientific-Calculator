@@ -1,0 +1,7 @@
+This is a calculator that is smart enough to round to the correct number of significant digits, and put the answer in scientific notation if necessary.
+
+Disclaimer: Only use program with decimal, negative sign, and numbers. Do not attempt to input any other characters, as it will lead to unexpected results. Also, keep in mind that Python removes unnecessary 0s before we get the input, and there is currently nothing we can do about that. Besides, everything should work.
+
+Although this project is marked with the GNU General Public License, feel free to contact me via chingtheprogrammer@icloud.com if you want me to add or change anything
+
+Ching Chang
