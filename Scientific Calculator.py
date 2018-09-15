@@ -4,6 +4,8 @@ Author: Ching Chang
 Date Created: May 16th, 2018
 '''
 
+import re
+
 def decimal(num):
     num = list(str(num))
     if "." in num:
@@ -22,21 +24,29 @@ def decimal(num):
         return 0
 
 def digits(num):
-    num = list(str(num))
+    num = list(num)
     if "." in num:
         num.remove(".")
     if "-" in num:
         num.remove("-")
-    while num[0] == "0":
-        del num[0]
+
+    #------If Dumb User Inputs 0-----#
+    try:
+        while num[0] == "0":
+            del num[0]
+    except IndexError:
+        return 1 #----Return Something Other Than 0 to Make the Process Continue----#
+
     return len(num)
 
-def round_a(num1, num2):
+def add(num1, num2):
 
     #------Find the Correct Decimal Place to Round To------#
     dec1 = min(decimal(num1), decimal(num2))
 
     #------Get the Sum Without Rounding------#
+    num1 = float(num1)
+    num2 = float(num2)
     num = num1 + num2
     dec2 = decimal(num)
     num = list(str(num))
@@ -96,25 +106,38 @@ def round_a(num1, num2):
 
     return "".join(num)
 
-def round_s(num1, num2):
+def subtract(num1, num2):
 
     #------Make the Smaller Number Negative So That the Answer will Always be Positive------#
+    num1 = float(num1)
+    num2 = float(num2)
     if num1 >= num2:
         num2 = -1 * num2
-        return round_a(num1, num2)
+        return add(num1, num2)
     else:
         num1 = -1 * num1
 
         #----Add the Negative Sign Afterward----#
-        return "-" + round_a(num1, num2)
+        return "-" + add(num1, num2)
 
-def round_md(num1, num2):
+def mutiply_divide(num1, num2, operation):
 
     #------Get the Significant Digit------#
     digs = min(digits(num1), digits(num2))
 
     #------Calculation------#
-    num = num1 * num2
+    num1 = float(num1)
+    num2 = float(num2)
+    if operation == "multiply":
+        num = num1 * num2
+    else:
+        #----Test Division by 0----#
+        try:
+            num = num1/num2
+        except ZeroDivisionError:
+            return("undefined")
+    if num == 0:
+        return "0"
     num = list(str(num))
 
     #------s = 1 If the Answer if Negative------#
@@ -181,46 +204,31 @@ def round_md(num1, num2):
     else:
         return str("".join(num)) + " X 10^" + str(i)
 
-#---------------------User's Inputs---------------------#
 
-print("Note: When entering 2 numbers, seperate them with a space.")
+#---------------------UI---------------------#
 
 while True:
-    userInput = input("Do you want to do (a)dding, (s)ubtracting, (m)ultiplying, or (d)ividing?")
-    if userInput == "a":
-        operation = "added"
-    elif userInput == "s":
-        operation = "subtracted"
-    elif userInput == "m":
-        operation = "multiplied"
-    elif userInput == "d":
-        operation = "divided"
-    else:
-        print("The input is invalid, please re-enter")
+    equation = str(input("Please enter the equation"))
+    try:
+        num1, num2 = re.findall(r"-?\d+\.?\d*", equation)
+    except ValueError:
+        print("Please only do one calculation at once")
         continue
 
-    num1, num2 = [str(n) for n in input("Please enter the two numbers that you want to be " + operation + ": ").split()]
-
-    if "." in num1:
-        num1 = float(num1)
+    if "*" in equation:
+        print(num1 + "*" + num2 + "=" + mutiply_divide(num1, num2, "multiply"))
+    elif "/" in equation:
+        print(num1 + "/" + num2 + "=" + mutiply_divide(num1, num2, "divide"))
+    elif "+" in equation:
+        print(num1 + "+" + num2 + "=" + add(num1, num2))
+    elif "-" in equation:
+        print(num1 + "-" + num2 + "=" + subtract(num1, num2))
     else:
-        num1 = int(num1)
-    if "." in num2:
-        num2 = float(num2)
-    else:
-        num2 = int(num2)
+        print("Can't find the operation, please re-enter")
+        continue
 
-    if userInput == "a":
-        print(round_a(num1, num2))
-    elif userInput == "s":
-        print(round_s(num1, num2))
-    elif userInput == "m":
-        print(round_md(num1, num2))
-    else:
-        print(round_md(num1, 1/num2))
-
-    userInput = input("Do you want to do another calculation? press y to continue, enter to escape")
-    if userInput == "y":
+    repeat = input("Do you want to do another calculation? press y to continue, enter to escape")
+    if repeat == "y":
         continue
     else:
         break
