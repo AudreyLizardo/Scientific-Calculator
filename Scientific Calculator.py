@@ -208,11 +208,11 @@ def mutiply_divide(num1, num2, operation):
 #---------------------UI---------------------#
 
 while True:
-    equation = str(input("Please enter the equation"))
+    equation = str(input("Enter the equation"))
     try:
         num1, num2 = re.findall(r"-?\d+\.?\d*", equation)
     except ValueError:
-        print("Please only do one calculation at once")
+        print("Please enter two numbers with one operation")
         continue
 
     if "*" in equation:
@@ -224,11 +224,6 @@ while True:
     elif "-" in equation:
         print(num1 + "-" + num2 + "=" + subtract(num1, num2))
     else:
-        print("Can't find the operation, please re-enter")
-        continue
+        print("Invalid operation, please re-enter")
 
-    repeat = input("Do you want to do another calculation? press y to continue, enter to escape")
-    if repeat == "y":
-        continue
-    else:
-        break
+    continue
