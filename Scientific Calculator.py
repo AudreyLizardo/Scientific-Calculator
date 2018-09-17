@@ -1,9 +1,3 @@
-'''
-Title: Python Calculator
-Author: Ching Chang
-Date Created: May 16th, 2018
-'''
-
 import re
 
 def decimal(num):
@@ -204,26 +198,59 @@ def mutiply_divide(num1, num2, operation):
     else:
         return str("".join(num)) + " X 10^" + str(i)
 
+def give_unit(equation):
+    match = re.search(r"(-?\d+\.?\d*)(\w*)([\+\-\*\/])(-?\d+\.?\d*)(\w*)", equation)
+    if match:
+        unit1 = match.group(2)
+        unit2 = match.group(5)
+        if "*" in equation:
+            if unit1 == unit2:
+                return unit1 + "^2"
+            else:
+                pass
+        elif "/" in equation:
+            if unit1 == unit2:
+                return ""
+            else:
+                return unit1 + "/" + unit2
+        elif "+" in equation or "-" in equation:
+            if unit1 == unit2:
+                return unit1
+            else:
+                pass
+        return "Can't perform calculation with different units yet, sorry"
+    return ""
 
 #---------------------UI---------------------#
 
+print("Enter 'quit' to quit at anytime'")
 while True:
     equation = str(input("Enter the equation"))
+
+    #----Remove the spaces to make the output look better----#
+    equation = re.sub(r" ", "", equation)
+    
     try:
+        if equation == "quit":
+            break
         num1, num2 = re.findall(r"-?\d+\.?\d*", equation)
+        unit = give_unit(equation)
     except ValueError:
         print("Please enter two numbers with one operation")
         continue
 
-    if "*" in equation:
-        print(num1 + "*" + num2 + "=" + mutiply_divide(num1, num2, "multiply"))
-    elif "/" in equation:
-        print(num1 + "/" + num2 + "=" + mutiply_divide(num1, num2, "divide"))
-    elif "+" in equation:
-        print(num1 + "+" + num2 + "=" + add(num1, num2))
-    elif "-" in equation:
-        print(num1 + "-" + num2 + "=" + subtract(num1, num2))
+    if unit == "Can't perform calculation with different units yet, sorry":
+        print(unit)
     else:
-        print("Invalid operation, please re-enter")
+        if "*" in equation:
+            print(equation + "=" + mutiply_divide(num1, num2, "multiply") + unit)
+        elif "/" in equation:
+            print(equation + "=" + mutiply_divide(num1, num2, "divide") + unit)
+        elif "+" in equation:
+            print(equation + "=" + add(num1, num2) + unit)
+        elif "-" in equation:
+            print(equation + "=" + subtract(num1, num2) + unit)
+        else:
+            print("Invalid operation, please re-enter")
 
     continue
