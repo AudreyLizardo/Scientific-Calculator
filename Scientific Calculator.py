@@ -6,10 +6,10 @@ def decimal(num):
         count = 0
         zero_index = num.index(".") + 1
 
-        #------Move the Decimal to the Right------#
+        #------Move the decimal to the right------#
         while zero_index < len(num):
 
-            #----Count How Many Places the Decimal Moved----#
+            #----Count how many places the decimal moved----#
             count += 1
             zero_index += 1
 
@@ -24,28 +24,28 @@ def digits(num):
     if "-" in num:
         num.remove("-")
 
-    #------If Dumb User Inputs 0-----#
+    #------If dumb User inputs 0-----#
     try:
         while num[0] == "0":
             del num[0]
     except IndexError:
-        return 1 #----Return Something Other Than 0 to Make the Process Continue----#
+        return 1 #----Return something other than 0 to make the process continue----#
 
     return len(num)
 
 def add(num1, num2, ratio1, ratio2):
 
-    #------Find the Correct Decimal Place to Round To------#
+    #------Find the correct decimal place to round To------#
     dec1 = min(decimal(num1), decimal(num2))
 
-    #------Get the Sum Without Rounding------#
+    #------Get the sum without rounding------#
     num1 = float(num1) * ratio1
     num2 = float(num2) * ratio2
     num = num1 + num2
     dec2 = decimal(num)
     num = list(str(num))
 
-    #------Add 0s If the Answer Needs More Decimal Places------#
+    #------Add 0s if the answer needs more decimal places------#
     while dec1 > dec2:
         num.append("0")
         dec2 += 1
@@ -53,20 +53,20 @@ def add(num1, num2, ratio1, ratio2):
     #------Round------#
     if dec1 < dec2:
 
-        #------Check If the Number After the Correct Decimal Place is Greater Than 4------#
+        #------Check if the number after the correct decimal place is greater than 4------#
         if int(num[dec1 + num.index(".") + 1]) > 4:
             #----Move the Decimal to the Left if the Answer Shouldn't Have Any Decimal So That
             #----the Number Before the Decimal Rounds Properly----#
             if dec1 == 0:
                 dec1 = -1
 
-            #----Round the Number by Increasing It by 1----#
+            #----Round the number by increasing it by 1----#
             num[dec1 + num.index(".")] = str(int(num[dec1 + num.index(".")]) + 1)
 
-        #----Carry the 10 to the Next Digit----#
+        #----Carry the 10 to the next digit----#
         while "10" in num:
 
-            #------Reverse the List So That it Checks From the Right-Most 10------#
+            #------Reverse the list so that it checks from the right-most 10------#
             num.reverse()
             x = num.index("10")
 
@@ -74,25 +74,25 @@ def add(num1, num2, ratio1, ratio2):
             num[x] = "0"
             if x + 1 < len(num):
 
-                #----Carry the 1 to the Next Digit----#
+                #----Carry the 1 to the next digit----#
                 if num[x + 1] == ".":
                     x += 1
                 num[x + 1] = str(int(num[x + 1]) + 1)
             else:
 
-                #----Add 1 Infront of the Number if There Are No Digit to Carry To----#
+                #----Add 1 infront of the number if there are no digit to carry to----#
                 num.append("1")
 
-            #------Reverse the List Back------#
+            #------Reverse the list back------#
             num.reverse()
 
-        #------After Rounding------#
-        #----Cut Off the Extra Digits----#
+        #------After rounding------#
+        #----Cut off the extra digits----#
         while dec1 < dec2:
             if dec1 == 0:
                 dec1 -= 1
 
-            #--Remove the Last Digit--#
+            #--Remove the last digit--#
             num.reverse()
             del num[0]
             dec2 -= 1
@@ -102,7 +102,7 @@ def add(num1, num2, ratio1, ratio2):
 
 def subtract(num1, num2, ratio1, ratio2):
 
-    #------Make the Smaller Number Negative So That the Answer will Always be Positive------#
+    #------Make the smaller number negative so that the answer will always be positive------#
     if "." in num1:
         num1 = float(num1) * ratio1
     else:
@@ -116,7 +116,7 @@ def subtract(num1, num2, ratio1, ratio2):
 
 def mutiply_divide(num1, num2, ratio1, ratio2, operation):
 
-    #------Get the Significant Digit------#
+    #------Get the significant digit------#
     digs = min(digits(num1), digits(num2))
 
     #------Calculation------#
@@ -136,21 +136,21 @@ def mutiply_divide(num1, num2, ratio1, ratio2, operation):
         negative = True
         num.remove("-")
 
-    #------Remember the Decimal Index------#
+    #------Remember the decimal index------#
     if "." in num:
         exponent = num.index(".")
         num.remove(".")
     else:
         exponent = len(num)
 
-    #------Remove the Frontal 0s So the Answer Can Be Written In Scientific Notation------#
+    #------Remove the frontal 0s so the answer can be written in scientific notation------#
     while num[0] == "0":
         del num[0]
 
-        #----Count the 0s Removed----#
+        #----Count the 0s removed----#
         removed_zero += 1
 
-    #------Update the Decimal Index------#
+    #------Update the decimal index------#
     exponent -= removed_zero
 
     #------Rounding------#
@@ -165,7 +165,7 @@ def mutiply_divide(num1, num2, ratio1, ratio2, operation):
                     x = num.index("10")
                     num[x] = "0"
 
-                    #--Check If the Next Digit is the Decimal--#
+                    #--Check if the next digit is the decimal--#
                     if x + 1 < len(num):
                         if num[x + 1] == ".":
                             x += 1
@@ -179,12 +179,12 @@ def mutiply_divide(num1, num2, ratio1, ratio2, operation):
         #------Cut Off the Extra Digits------#
         num = num[:digs]
 
-    #------Add 0s if the Answer Needs More Digits------#
+    #------Add 0s if the answer needs more digits------#
     else:
         while len(num) < digs:
             num.append("0")
 
-    #------Add the Decimal, Negative Sign, and Scientific Notation------#
+    #------Add the decimal, negative sign, and scientific notation------#
     if digs != 1:
         num.insert(1, ".")
     if negative == True:
@@ -195,7 +195,6 @@ def mutiply_divide(num1, num2, ratio1, ratio2, operation):
         return str("".join(num)) + " X 10"
     if exponent > 1:
         if exponent <= 3:
-            print(exponent)
             return str("".join(num)) + " X 10" + eval(r'"\u00b' + str(exponent) + '"') #--Unicode for 2 and 3 is 00b--#
         elif exponent <= 9:
             return str("".join(num)) + " X 10" + eval(r'"\u207' + str(exponent) + '"') #--Unicode for 4 to 9 is 207--#
@@ -338,7 +337,6 @@ while True:
             unit, ratio1, ratio2 = give_units_and_ratios(expression)
         except UnboundLocalError:
             print("Invalid operation, please re-enter")
-            raise
             continue
     except ValueError:
         print("Please enter two numbers with one operation")
@@ -360,5 +358,3 @@ while True:
             print(expression + "=" + subtract(num1, num2, ratio1, ratio2) + unit)
         else:
             print("Invalid operation, please re-enter")
-
-    continue
