@@ -43,7 +43,20 @@ def add(num1, num2, ratio1, ratio2):
     num2 = float(num2) * ratio2
     num = num1 + num2
     dec2 = decimal(num)
-    num = list(str(num))
+
+    #----If python changes num to scientific notation----#
+    if "e-" in str(num):
+        base, index = str(num).split("e-")
+        num = list(base)
+        if "." in num:
+            num.remove(".")
+        for i in range(int(index)):
+            num.insert(0, "0")
+        num.insert(1, ".")
+    else:
+        num = list(str(num))
+
+    dec2 = decimal("".join(num))
 
     #------Add 0s if the answer needs more decimal places------#
     while dec1 > dec2:
@@ -128,7 +141,18 @@ def mutiply_divide(num1, num2, ratio1, ratio2, operation):
         num = num1/num2
     if num == 0:
         return "0"
-    num = list(str(num))
+
+    #----If python changes num to scientific notation----#
+    if "e-" in str(num):
+        base, index = str(num).split("e-")
+        num = list(base)
+        if "." in num:
+            num.remove(".")
+        for i in range(int(index)):
+            num.insert(0, "0")
+        num.insert(1, ".")
+    else:
+        num = list(str(num))
 
     negative = False
     removed_zero = 1
@@ -202,8 +226,6 @@ def mutiply_divide(num1, num2, ratio1, ratio2, operation):
             return str("".join(num)) + " X 10\u00b9\u2070" #--Return 10--#
         elif exponent == 11:
             return str("".join(num)) + " X 10\u00b9\u00b9" #--Return 11--#
-        elif exponent <= 13:
-            return str("".join(num)) + " X 10\u00b9" + eval(r'"\u00b' + str(exponent)[1] + '"') #--Return 12 to 13--#
         else:
             return "Out of range!"
     else:
@@ -212,6 +234,14 @@ def mutiply_divide(num1, num2, ratio1, ratio2, operation):
             return str("".join(num)) + "X 10\u207B\u00b9"
         elif exponent <= 3:
             return str("".join(num)) + " X 10\u207B" + eval(r'"\u00b' + str(exponent) + '"')
+        elif exponent <= 9:
+            return str("".join(num)) + " X 10\u207B" + eval(r'"\u207' + str(exponent) + '"')
+        elif exponent == 10:
+            return str("".join(num)) + " X 10\u207B\u00b9\u2070" #--Return 10--#
+        elif exponent == 11:
+            return str("".join(num)) + " X 10\u207B\u00b9\u00b9" #--Return 11--#
+        elif exponent <= 13:
+            return str("".join(num)) + " X 10\u207B\u00b9" + eval(r'"\u00b' + str(exponent)[1] + '"')
         else:
             return "Out of range!"
 
@@ -269,12 +299,10 @@ def unit_conversion(unit1, unit2):
 
         #----Check if exceptions are in the units----#
         for exception in exceptions:
-            exception_check = re.search(exception, unit1)
-            if exception_check and checked1 == False:
+            if exception in unit1 and checked1 == False:
                 exception1 = exception
                 checked1 == True
-            exception_check = re.search(exception, unit2)
-            if exception_check and checked2 == False:
+            if exception in unit2 and checked2 == False:
                 exception2 = exception
                 checked2 == True
 
