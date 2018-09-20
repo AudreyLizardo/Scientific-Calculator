@@ -125,7 +125,8 @@ def subtract(num1, num2, ratio1, ratio2):
     else:
         num2 = int(num2) * ratio2
 
-    return add(str(num1), str(num2), 1, 1) #----Units are already converted----#
+    #----Units are already converted----#
+    return add(str(num1), str(num2), 1, 1)
 
 def mutiply_divide(num1, num2, ratio1, ratio2, operation):
 
@@ -138,7 +139,7 @@ def mutiply_divide(num1, num2, ratio1, ratio2, operation):
     if operation == "multiply":
         num = num1 * num2
     else:
-        num = num1/num2
+        num = num1 / num2
     if num == 0:
         return "0"
 
@@ -219,13 +220,17 @@ def mutiply_divide(num1, num2, ratio1, ratio2, operation):
         return str("".join(num)) + " X 10"
     if exponent > 1:
         if exponent <= 3:
-            return str("".join(num)) + " X 10" + eval(r'"\u00b' + str(exponent) + '"') #--Unicode for 2 and 3 is 00b--#
+            #--Unicode for 2 and 3 is 00b--#
+            return str("".join(num)) + " X 10" + eval(r'"\u00b' + str(exponent) + '"')
         elif exponent <= 9:
-            return str("".join(num)) + " X 10" + eval(r'"\u207' + str(exponent) + '"') #--Unicode for 4 to 9 is 207--#
+            #--Unicode for 4 to 9 is 207--#
+            return str("".join(num)) + " X 10" + eval(r'"\u207' + str(exponent) + '"')
         elif exponent == 10:
-            return str("".join(num)) + " X 10\u00b9\u2070" #--Return 10--#
+            #--Return 10--#
+            return str("".join(num)) + " X 10\u00b9\u2070"
         elif exponent == 11:
-            return str("".join(num)) + " X 10\u00b9\u00b9" #--Return 11--#
+            #--Return 11--#
+            return str("".join(num)) + " X 10\u00b9\u00b9"
         else:
             return "Out of range!"
     else:
@@ -237,9 +242,11 @@ def mutiply_divide(num1, num2, ratio1, ratio2, operation):
         elif exponent <= 9:
             return str("".join(num)) + " X 10\u207B" + eval(r'"\u207' + str(exponent) + '"')
         elif exponent == 10:
-            return str("".join(num)) + " X 10\u207B\u00b9\u2070" #--Return 10--#
+            #--Return 10--#
+            return str("".join(num)) + " X 10\u207B\u00b9\u2070"
         elif exponent == 11:
-            return str("".join(num)) + " X 10\u207B\u00b9\u00b9" #--Return 11--#
+            #--Return 11--#
+            return str("".join(num)) + " X 10\u207B\u00b9\u00b9"
         elif exponent <= 13:
             return str("".join(num)) + " X 10\u207B\u00b9" + eval(r'"\u00b' + str(exponent)[1] + '"')
         else:
@@ -275,14 +282,15 @@ def give_units_and_ratios(expression):
             else:
                 pass
         return "They are in different units ¯\_(ツ)_/¯", ratio1, ratio2
-    return "", ratio1, ratio2 #----Return nothing and 1 as ratio if there are no units----#
+    #----Return nothing and 1 as ratio if there are no units----#
+    return "", ratio1, ratio2
 
 def unit_conversion(unit1, unit2):
 
     prefixes = {
-    r"(P)(\w)": 1000000000000000, r"(T)(\w)": 1000000000000, r"(G)(\w)": 1000000000, r"(M)(\w)": 1000000,
-    r"(k)(\w)": 1000, r"(h)(\w)": 100, r"(da)(\w)": 10, r"(d)(\w)": 0.1, r"(c)(\w)": 0.01, r"(m)(\w)": 0.001,
-    r"(µ)(\w)": 0.000001, r"(n)(\w)": 0.000000001, r"(p)(\w)": 0.000000000001, r"(f)(\w)": 0.000000000000001
+        r"(P)(\w)": 1000000000000000, r"(T)(\w)": 1000000000000, r"(G)(\w)": 1000000000, r"(M)(\w)": 1000000,
+        r"(k)(\w)": 1000, r"(h)(\w)": 100, r"(da)(\w)": 10, r"(d)(\w)": 0.1, r"(c)(\w)": 0.01, r"(m)(\w)": 0.001,
+        r"(µ)(\w)": 0.000001, r"(n)(\w)": 0.000000001, r"(p)(\w)": 0.000000000001, r"(f)(\w)": 0.000000000000001
     }
 
     exceptions = [r"cd", r"mol", r"nit"]
@@ -306,11 +314,13 @@ def unit_conversion(unit1, unit2):
                 exception2 = exception
                 checked2 == True
 
-        if len(unit1) > len(exception1) and update1 == False: #----So that the prefix only changes once----#
+        #----So that the prefix only changes once----#
+        if len(unit1) > len(exception1) and update1 == False:
             match = re.match(prefix, unit1)
             if match: #----If there is a prefix----#
                 prefix1 = match.group(1)
-                unit1 = re.sub(prefix, r"\2", unit1) #----Convert to Standard Unit----#
+                #----Convert to Standard Unit----#
+                unit1 = re.sub(prefix, r"\2", unit1)
                 ratio1 = prefixes[prefix]
                 update1 = True
             else: #----No prefix----#
@@ -320,11 +330,13 @@ def unit_conversion(unit1, unit2):
             prefix1 = ""
             ratio1 = 1
 
-        if len(unit2) > len(exception2) and update2 == False: #----So that the prefix only changes once----#
+        #----So that the prefix only changes once----#
+        if len(unit2) > len(exception2) and update2 == False:
             match = re.match(prefix, unit2)
             if match: #----If there is prefix----#
                 prefix2 = match.group(1)
-                unit2 = re.sub(prefix, r"\2", unit2) #----Convert to Standard Unit----#
+                #----Convert to Standard Unit----#
+                unit2 = re.sub(prefix, r"\2", unit2)
                 ratio2 = prefixes[prefix]
                 update2 = True
             else: #----No prefix----#
