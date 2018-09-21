@@ -244,8 +244,8 @@ def mutiply_divide(num1, num2, ratio1, ratio2, operation):
 
         #------For superscript unicode, see https://en.wikipedia.org/wiki/Unicode_subscripts_and_superscripts------#
 
-def give_units_and_ratios(expression):
-    match = re.search(r"(-?\d+\.?\d*)(\w*)([\+\-\*\/])(-?\d+\.?\d*)(\w*)", expression)
+def give_units_and_ratios(calculation):
+    match = re.search(r"(-?\d*\.?\d*)(\w*)([\+\-\*\/])(-?\d*\.?\d*)(\w*)", calculation)
     if match:
         unit1 = match.group(2)
         unit2 = match.group(5)
@@ -254,19 +254,19 @@ def give_units_and_ratios(expression):
         else:
             ratio1, ratio2 = (1, 1)
 
-        if "*" in expression:
+        if "*" in calculation:
             if unit1 == "" and unit2 == "": #----If there are no units----#
                 return "", ratio1, ratio2
             if unit1 != "" and unit1 == unit2: #----If the units are the same----#
                 return unit1 + "\u00b2", ratio1, ratio2
             else: #----If the units are different----#
                 return unit1 + unit2, ratio1, ratio2
-        elif "/" in expression:
+        elif "/" in calculation:
             if unit1 == unit2:
                 return "", ratio1, ratio2 #----Because the units cancel each other out----#
             else:
                 return unit1 + "/" + unit2, ratio1, ratio2
-        elif "+" in expression or "-" in expression:
+        elif "+" in calculation or "-" in calculation:
             if unit1 == unit2:
                 return unit1, ratio1, ratio2
             else:
@@ -338,8 +338,9 @@ def unit_conversion(unit1, unit2):
             prefix2 = ""
             ratio2 = 1
 
-    if unit1 == unit2: #----Check if they are in the same units----#
-        #----Conver to the smaller unit----#
+    #----Check if they are in the same units----#
+    if unit1 == unit2:
+        #----Convert to the smaller unit----#
         if ratio1 > ratio2:
             unit1 = prefix2 + unit1
             unit2 = prefix2 + unit2
@@ -353,24 +354,36 @@ def unit_conversion(unit1, unit2):
 
     return unit1, unit2, ratio1, ratio2
 
-#---------------------UI---------------------#
+#---------------------Loop---------------------#
 print("Enter 'quit' to quit at anytime")
 while True:
-    expression = str(input("Enter the expression"))
+    calculation = str(input("Enter the calculation"))
 
     #----Remove the spaces to make the output look better----#
-    expression = re.sub(" ", "", expression)
+    calculation = re.sub(" ", "", calculation)
 
     try:
-        if expression == "quit":
+        if calculation == "quit":
             break
-        num1, waste, num2, waste = re.findall(r"-?\d*\.?\d*", expression)
+
+        num1, num2 = re.findall(r"-?\d+\.?\d*", calculation)
+        #----Check for decimal at the front----#
+        match = re.search(r"\." + num1, calculation)
+        if match:
+            num1 = "0." + num1
+        match = re.search(r"\." + num2, calculation)
+        if match:
+            num2 = "0." + num2
+
+        #----Check for decimal at the end----#
         if num1[-1] == ".":
             num1 = num1 + "0"
         if num2[-1] == ".":
             num2 = num2 + "0"
+
+        #----Unit conversion----#
         try:
-            unit, ratio1, ratio2 = give_units_and_ratios(expression)
+            unit, ratio1, ratio2 = give_units_and_ratios(calculation)
         except UnboundLocalError:
             print("Invalid operation, please re-enter")
             continue
@@ -381,16 +394,16 @@ while True:
     if unit == "They are in different units ¯\_(ツ)_/¯":
         print(unit)
     else:
-        if "*" in expression:
-            print(expression + "=" + mutiply_divide(num1, num2, ratio1, ratio2, "multiply") + unit)
-        elif "/" in expression:
+        if "*" in calculation:
+            print(calculation + "=" + mutiply_divide(num1, num2, ratio1, ratio2, "multiply") + unit)
+        elif "/" in calculation:
             if float(num2) == 0.0:
-                print(expression + "=" + "undefined")
+                print(calculation + "=" + "undefined")
             else:
-                print(expression + "=" + mutiply_divide(num1, num2, ratio1, ratio2, "divide") + unit)
-        elif "+" in expression:
-            print(expression + "=" + add(num1, num2, ratio1, ratio2) + unit)
-        elif "-" in expression:
-            print(expression + "=" + subtract(num1, num2, ratio1, ratio2) + unit)
+                print(calculation + "=" + mutiply_divide(num1, num2, ratio1, ratio2, "divide") + unit)
+        elif "+" in calculation:
+            print(calculation + "=" + add(num1, num2, ratio1, ratio2) + unit)
+        elif "-" in calculation:
+            print(calculation + "=" + subtract(num1, num2, ratio1, ratio2) + unit)
         else:
             print("Invalid operation, please re-enter")
