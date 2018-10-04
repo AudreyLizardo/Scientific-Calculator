@@ -278,11 +278,10 @@ def give_units_and_ratios(calculation):
 def unit_conversion(unit1, unit2):
 
     prefixes = {
-        r"(P)(\w)": 1000000000000000, r"(T)(\w)": 1000000000000,
-        r"(G)(\w)": 1000000000, r"(M)(\w)": 1000000, r"(k)(\w)": 1000,
-        r"(h)(\w)": 100, r"(da)(\w)": 10, r"(d)(\w)": 0.1, r"(c)(\w)": 0.01,
-        r"(m)(\w)": 0.001, r"(µ)(\w)": 0.000001, r"(n)(\w)": 0.000000001,
-        r"(p)(\w)": 0.000000000001, r"(f)(\w)": 0.000000000000001
+        r"(P)(\w)": 1e15, r"(T)(\w)": 1e12, r"(G)(\w)": 1e9, r"(M)(\w)": 1e6,
+        r"(k)(\w)": 1e3, r"(h)(\w)": 1e2, r"(da)(\w)": 1e1, r"(d)(\w)": 1e-1,
+        r"(c)(\w)": 1e-2, r"(m)(\w)": 1e-3, r"(µ)(\w)": 1e-6, r"(n)(\w)": 1e-9,
+        r"(p)(\w)": 1e-12, r"(f)(\w)": 1e-15
     }
 
     exceptions = [r"cd", r"mol", r"nit"]
@@ -354,7 +353,7 @@ def unit_conversion(unit1, unit2):
 
     return unit1, unit2, ratio1, ratio2
 
-#---------------------Loop---------------------#
+#------Execution------#
 print("Enter 'quit' to quit at anytime")
 while True:
     calculation = str(input("Enter the calculation"))
@@ -367,7 +366,7 @@ while True:
             break
 
         num1, num2 = re.findall(r"-?\d+\.?\d*", calculation)
-        #----Check for decimal at the front----#
+        #----Check for missing zero at the front----#
         match = re.search(r"\." + num1, calculation)
         if match:
             num1 = "0." + num1
@@ -375,7 +374,7 @@ while True:
         if match:
             num2 = "0." + num2
 
-        #----Check for decimal at the end----#
+        #----Check for missing zero at the end----#
         if num1[-1] == ".":
             num1 = num1 + "0"
         if num2[-1] == ".":
