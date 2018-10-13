@@ -4,7 +4,7 @@ def decimal(num):
     num = str(num)
     if "." in num:
         waste, num = num.split(".")
-        return(len(num))
+        return len(num)
     else:
         return 0
 
@@ -118,7 +118,7 @@ def subtract(num1, num2, ratio1, ratio2):
     #----Units are already converted----#
     return add(str(num1), str(num2), 1, 1)
 
-def mutiply_divide(num1, num2, ratio1, ratio2, operation):
+def multiply_divide(num1, num2, ratio1, ratio2, operation):
 
     #------Get the significant digit------#
     digit_allowed = min(digits(num1), digits(num2))
@@ -359,7 +359,7 @@ while True:
     calculation = str(input("Enter the calculation"))
 
     #----Remove the spaces to make the output look better----#
-    calculation = re.sub(" ", "", calculation)
+    calculation = calculation.replace(" ", "")
 
     try:
         if calculation == "quit":
@@ -394,12 +394,12 @@ while True:
         print(unit)
     else:
         if "*" in calculation:
-            print(calculation + "=" + mutiply_divide(num1, num2, ratio1, ratio2, "multiply") + unit)
+            print(calculation + "=" + multiply_divide(num1, num2, ratio1, ratio2, "multiply") + unit)
         elif "/" in calculation:
             if float(num2) == 0.0:
                 print(calculation + "=" + "undefined")
             else:
-                print(calculation + "=" + mutiply_divide(num1, num2, ratio1, ratio2, "divide") + unit)
+                print(calculation + "=" + multiply_divide(num1, num2, ratio1, ratio2, "divide") + unit)
         elif "+" in calculation:
             print(calculation + "=" + add(num1, num2, ratio1, ratio2) + unit)
         elif "-" in calculation:
