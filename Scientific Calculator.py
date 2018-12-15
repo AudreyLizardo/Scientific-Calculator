@@ -271,7 +271,7 @@ def give_units_and_ratios(calculation):
                 return unit1, ratio1, ratio2
             else:
                 pass
-        return "They are in different units ¯\_(ツ)_/¯", ratio1, ratio2
+        return r"They are in different units ¯\_(ツ)_/¯", ratio1, ratio2
     #----Return nothing and 1 as ratio if there are no units----#
     return "", 1, 1
 
@@ -390,7 +390,7 @@ while True:
         print("Please enter two numbers with one operation")
         continue
 
-    if unit == "They are in different units ¯\_(ツ)_/¯":
+    if unit == r"They are in different units ¯\_(ツ)_/¯":
         print(unit)
     else:
         if "*" in calculation:
