@@ -202,7 +202,7 @@ def multiply_divide(num1, num2, ratio1, ratio2, operation):
     #------Add the decimal, negative sign, and scientific notation------#
     if digit_allowed != 1:
         num.insert(1, ".")
-    if negative == True:
+    if negative:
         num.insert(0, "-")
     if exponent == 0:
         return "".join(num)
@@ -269,8 +269,6 @@ def give_units_and_ratios(calculation):
         elif "+" in calculation or "-" in calculation:
             if unit1 == unit2:
                 return unit1, ratio1, ratio2
-            else:
-                pass
         return r"They are in different units ¯\_(ツ)_/¯", ratio1, ratio2
     #----Return nothing and 1 as ratio if there are no units----#
     return "", 1, 1
@@ -300,10 +298,10 @@ def unit_conversion(unit1, unit2):
         for exception in exceptions:
             if exception in unit1 and checked1 == False:
                 exception1 = exception
-                checked1 == True
+                checked1 = True
             if exception in unit2 and checked2 == False:
                 exception2 = exception
-                checked2 == True
+                checked2 = True
 
         #----So that the prefix only changes once----#
         if len(unit1) > len(exception1) and update1 == False:
